@@ -14,10 +14,9 @@
 (iswitchb-mode t)
 (global-set-key "\M-g" `goto-line)
 (global-set-key "\M-i" `indent-region)
-
 (add-to-list 'load-path (expand-file-name "~/elisp/"))
 
-;; SKK
+;; Skk
 (require 'skk-setup)
 (defvar skk-large-jisyo "~/SKK-JISYO.L")
 
@@ -28,6 +27,9 @@
 (require 'moccur-edit)
 (define-key ctl-x-map "F" 'moccur-grep-find)
 (define-key ctl-x-map "f" 'moccur-grep)
+(defadvice moccur-edit-change-file
+  (after save-after-moccur-edit-buffer activate)
+  (save-buffer))
 
 ;; memo (hown and muse)
 (setq will-take-memo nil)
