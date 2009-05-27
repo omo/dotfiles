@@ -1,0 +1,27 @@
+
+;; Muse
+(setq muse-project-alist
+      '(("Note" ("~/note" :default "index"))))
+(setq muse-file-extension nil
+      muse-mode-auto-p t)
+(require 'muse-mode)
+(require 'muse-wiki)
+(defun my-open-muse()
+  (interactive)
+  (let ((welcome-page 
+	 (find-file-noselect 
+	  (expand-file-name "~/note/WelcomePage"))))
+    (switch-to-buffer welcome-page)))
+(define-key ctl-x-map "w" 'my-open-muse)
+
+; howm
+(setq howm-menu-lang 'ja)
+(setq howm-directory "~/memo/home/howm")
+(setq howm-file-name-format "%Y_%m.howm")
+(setq howm-list-recent-title t)
+(setq howm-template-file-format "")
+(setq howm-view-summary-persistent nil)
+(setq auto-mode-alist
+         (append '(("\\.howm$" . howm-mode)) auto-mode-alist))
+(require 'howm)
+(require 'howm-mode)
