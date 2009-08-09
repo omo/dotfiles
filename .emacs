@@ -9,6 +9,10 @@
 
 (add-to-list 'load-path (expand-file-name "~/elisp/"))
 
+;; .mm
+(setq auto-mode-alist
+      (append '(("\\.mm$" . objc-mode)) auto-mode-alist))
+
 ;; SKK
 (require 'skk-setup)
 (defvar skk-large-jisyo "~/SKK-JISYO.L")
@@ -16,6 +20,8 @@
 ;; Moccur
 (require 'color-moccur)
 (require 'moccur-edit)
+(define-key ctl-x-map "f" 'moccur-grep)
+(define-key ctl-x-map "F" 'moccur-grep-find)
 
 ;; Muse
 (setq muse-project-alist
@@ -50,7 +56,31 @@
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)) auto-mode-alist))
 
-; (when (eq system-type 'darwin))
+(setq auto-mode-alist
+      (append '(("\\.as$" . java-mode)) auto-mode-alist))
+
+(require 'erlang)
+(setq auto-mode-alist
+      (append '(("\\.erl$" . erlang-mode)
+		("\\.hrl$" . erlang-mode)) auto-mode-alist))
+
+(when (eq system-type 'darwin)
+  (setq mf-off-x      1280)
+  (setq mf-max-width  1600)
+  (setq mf-max-height 1200)
+  (setq mf-display-padding-width  10)
+  )
+(defun my-monoscreen()
+  (interactive)
+  (setq mf-off-x      nil)
+  (setq mf-max-width  nil)
+  (setq mf-max-height nil)
+  (setq mf-display-padding-width  0)
+  )
+(defun my-maximize-monoscreen()
+  (interactive)
+  (my-monoscreen)
+  (maximize-frame))
 
 (when (eq system-type 'gnu/linux)
   (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
