@@ -1,12 +1,19 @@
 
+;;
+;; appearance
+;;
 (set-language-environment "Japanese")
 (tool-bar-mode nil)
 (menu-bar-mode nil)
 
+;;
+;; customize built-ins
+;; 
 (setq make-backup-files nil)
 (setq inhibit-startup-screen t)
 (iswitchb-mode t)
-
+(global-set-key "\M-g" `goto-line)
+(global-set-key "\M-i" `indent-region)
 (add-to-list 'load-path (expand-file-name "~/elisp/"))
 
 ;; .mm
@@ -17,38 +24,21 @@
 (require 'skk-setup)
 (defvar skk-large-jisyo "~/SKK-JISYO.L")
 
-;; Moccur
+; Moccur
+; http://www.bookshelf.jp/elc/moccur-edit.el
+; http://www.emacswiki.org/emacs/download/color-moccur.el
 (require 'color-moccur)
 (require 'moccur-edit)
-(define-key ctl-x-map "f" 'moccur-grep)
 (define-key ctl-x-map "F" 'moccur-grep-find)
+(define-key ctl-x-map "f" 'moccur-grep)
+(defadvice moccur-edit-change-file
+  (after save-after-moccur-edit-buffer activate)
+  (save-buffer))
 
-;; Muse
-(setq muse-project-alist
-      '(("Note" ("~/note" :default "index"))))
-(setq muse-file-extension nil
-      muse-mode-auto-p t)
-(require 'muse-mode)
-(require 'muse-wiki)
-(defun my-open-muse()
-  (interactive)
-  (let ((welcome-page 
-	 (find-file-noselect 
-	  (expand-file-name "~/note/WelcomePage"))))
-    (switch-to-buffer welcome-page)))
-(define-key ctl-x-map "w" 'my-open-muse)
-
-;; howm
-(setq howm-menu-lang 'ja)
-(setq howm-directory "~/memo/home/howm")
-(setq howm-file-name-format "%Y_%m.howm")
-(setq howm-list-recent-title t)
-(setq howm-template-file-format "")
-(setq howm-view-summary-persistent nil)
-(setq auto-mode-alist
-         (append '(("\\.howm$" . howm-mode)) auto-mode-alist))
-(require 'howm)
-(require 'howm-mode)
+;; memo (hown and muse)
+(setq will-take-memo nil)
+(if will-take-memo
+    (load (expand-file-name "~/work/dotfiles/.emacs.memo")))
 
 ;; ruby-mode
 (autoload 'ruby-mode "ruby-mode"
@@ -82,6 +72,18 @@
   (my-monoscreen)
   (maximize-frame))
 
+;; python-mode
+(setq auto-mode-alist
+      (append '(("SConstruct" . python-mode)) auto-mode-alist))
+
+;; c++-mode
+(setq auto-mode-alist
+      (append '(("\.h$" . c++-mode)) auto-mode-alist))
+
+;; psvn
+(require 'psvn)
+(global-set-key "\C-xv" 'svn-status)
+
 (when (eq system-type 'gnu/linux)
   (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
   (setq inhibit-startup-screen t)
@@ -99,6 +101,5 @@
 
 ;; http://github.com/rmm5t/maxframe-el/tree/master
 (require 'maxframe)
-
 ;; emacsclient
 (server-start)
