@@ -1,5 +1,6 @@
 
 ;; Muse
+(add-to-list 'load-path (expand-file-name "~/elisp/muse"))
 (setq muse-project-alist
       '(("Note" ("~/note" :default "index"))))
 (setq muse-file-extension nil
