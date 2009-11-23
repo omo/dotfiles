@@ -1,8 +1,11 @@
-
+;; -*- Mode: Emacs-Lisp -*-
+;;
 ;; Muse
+;; download from http://mwolson.org/projects/EmacsMuse.html
+;; or "sudo aptitude install muse-el"
 (add-to-list 'load-path (expand-file-name "~/elisp/muse"))
 (setq muse-project-alist
-      '(("Note" ("~/note" :default "index"))))
+      '(("Note" ("~/memo/note" :default "index"))))
 (setq muse-file-extension nil
       muse-mode-auto-p t)
 (require 'muse-mode)
@@ -11,13 +14,15 @@
   (interactive)
   (let ((welcome-page 
 	 (find-file-noselect 
-	  (expand-file-name "~/note/WelcomePage"))))
+	  (expand-file-name "~/memo/note/WelcomePage"))))
     (switch-to-buffer welcome-page)))
 (define-key ctl-x-map "w" 'my-open-muse)
 
-; howm
+;; howm
+;; download from http://howm.sourceforge.jp/
+;; or "sudo aptitude install howm"
 (setq howm-menu-lang 'ja)
-(setq howm-directory "~/memo/home/howm")
+(setq howm-directory (format "~/memo/%s/howm" (system-name)))
 (setq howm-file-name-format "%Y_%m.howm")
 (setq howm-list-recent-title t)
 (setq howm-template-file-format "")
