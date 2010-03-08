@@ -21,8 +21,11 @@
 ;; howm
 ;; download from http://howm.sourceforge.jp/
 ;; or "sudo aptitude install howm"
+
+(unless (boundp 'my-howm-dir)
+  (setq my-howm-dir (system-name)))
 (setq howm-menu-lang 'ja)
-(setq howm-directory (format "~/memo/%s/howm" (system-name)))
+(setq howm-directory (format "~/memo/%s/howm" my-howm-dir))
 (setq howm-file-name-format "%Y_%m.howm")
 (setq howm-list-recent-title t)
 (setq howm-template-file-format "")
