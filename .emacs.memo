@@ -34,3 +34,5 @@
          (append '(("\\.howm$" . howm-mode)) auto-mode-alist))
 (require 'howm)
 (require 'howm-mode)
+
+(add-hook 'howm-mode-hook 'turn-on-auto-revert-mode)

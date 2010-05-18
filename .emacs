@@ -9,6 +9,12 @@
 (menu-bar-mode nil)
 (setq visible-bell t)
 
+(prefer-coding-system       'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
+(setq default-buffer-file-coding-system 'utf-8-unix)
+;; MS Windows clipboard is UTF-16LE 
+;(set-clipboard-coding-system 'utf-16le-dos)
+
 ;;
 ;; customize built-ins
 ;; 
@@ -51,19 +57,18 @@
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)) auto-mode-alist))
 
-(setq auto-mode-alist
-      (append '(("\\.as$" . java-mode)) auto-mode-alist))
-
-; temporaly disabled
+;; for hobby programming
 (when enabled-minor-languages
   (require 'erlang)
   (setq auto-mode-alist
 	(append '(("\\.erl$" . erlang-mode)
 		  ("\\.hrl$" . erlang-mode)) auto-mode-alist))
   (add-to-list 'load-path (expand-file-name "~/elisp/scala"))
+  (setq auto-mode-alist
+	(append '(("\\.as$" . java-mode)) auto-mode-alist))
   (require 'scala-mode-auto))
 
-(when (eq system-type 'darwin)
+(when enable-mf-customization
   (setq mf-off-x      1280)
   (setq mf-max-width  1600)
   (setq mf-max-height 1200)
@@ -153,6 +158,34 @@
 (ad-enable-advice 'font-lock-mode 'before 'my-font-lock-mode)
 (ad-activate 'font-lock-mode)
 
+
+(defun split-window-horizontally-triple ()
+  (interactive)
+  (let ((size (/ (* (window-width) 2) 3)))
+    (split-window-horizontally size)
+    (split-window-horizontally)))
+
+;; from http://d.hatena.ne.jp/rubikitch/20100210/emacs
+(defun other-window-or-split ()
+  (interactive)
+  (when (one-window-p)
+    (split-window-horizontally-triple))
+  (other-window 1))
+(global-set-key (kbd "C-t") 'other-window-or-split)
+
+(defun my-last-window ()
+  (interactive)
+  (other-window -1))
+
+(defun my-next-window ()
+  (interactive)
+  (other-window  1))
+
+(global-set-key (kbd "M-p") 'previous-buffer)
+(global-set-key (kbd "M-n") 'next-buffer)
+(global-set-key (kbd "M-P") 'my-last-window)
+(global-set-key (kbd "M-N") 'my-next-window)
+
 ;;
 ;; gdb
 ;; from http://d.hatena.ne.jp/higepon/20090505/p1
@@ -168,3 +201,27 @@
   (set-window-buffer (selected-window) "*compilation*")
   (end-of-buffer))
 (global-set-key "\C-xr" 'my-recompile)
+
+;; modified http://www.emacswiki.org/emacs/TinyUrl
+(require 'thingatpt)
+(defun my-get-shorter-bug-url(longer-uri)
+  (cond ((string-match "bugs.webkit.org" longer-uri)
+	 (let ((num-start (string-match "[[:digit:]]" longer-uri)))
+	   (concat "http://webkit.org/b/" (substring longer-uri num-start))))
+	((string-match "http://code.google.com/p/chromium/issues" longer-uri)
+	 (let ((num-start (string-match "[[:digit:]]" longer-uri)))
+	   (concat "http://crbug.com/" (substring longer-uri num-start))))
+	((error (concat longer-uri " is not bug url")))))
+
+(defun my-shorten-bug-url()
+  (interactive)
+  (let ((bounds (bounds-of-thing-at-point 'url)))
+    (when bounds
+      (let* ((long-url (buffer-substring
+                        (car bounds) (cdr bounds)))
+             (short-url (my-get-shorter-bug-url long-url)))
+	(save-excursion
+          (goto-char (car bounds))
+          (replace-string long-url short-url nil (car bounds) (cdr bounds)))))))
+
+(global-set-key (kbd "C-c S") 'my-shorten-bug-url)
