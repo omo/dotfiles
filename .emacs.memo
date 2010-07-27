@@ -4,6 +4,7 @@
 ;; download from http://mwolson.org/projects/EmacsMuse.html
 ;; or "sudo aptitude install muse-el"
 (add-to-list 'load-path (expand-file-name "~/elisp/muse"))
+(add-to-list 'load-path (expand-file-name "~/elisp/howm"))
 (setq muse-project-alist
       '(("Note" ("~/memo/note" :default "index"))))
 (setq muse-file-extension nil
