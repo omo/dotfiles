@@ -102,12 +102,25 @@
 ;; webkit-style
 ;; http://lists.macosforge.org/pipermail/webkit-dev/2009-September/010014.html
 (defun webkit-c-mode-hook ()
+  (interactive)
   (setq c-basic-offset 4)
   (setq tab-width 8)
   (setq indent-tabs-mode nil)
   (c-set-offset 'innamespace 0) 
   (c-set-offset 'substatement-open 0))
-(add-hook 'c-mode-common-hook 'webkit-c-mode-hook)
+
+;; google-c-style.el
+;; http://google-styleguide.googlecode.com/svn/trunk/google-c-style.el
+(require 'google-c-style)
+
+;; for chrome
+(defun chrome-c-mode-hook ()
+  (interactive)
+  (if (string-match "src/chrome" (buffer-file-name))
+      (google-set-c-style)
+    (webkit-c-mode-hook)))
+
+(add-hook 'c-mode-common-hook 'chrome-c-mode-hook)
 
 (defun webkit-change-log-mode-hook ()
   (setq tab-width 8)
