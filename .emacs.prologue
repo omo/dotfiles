@@ -2,3 +2,4 @@
 (setq will-take-memo t)
 (setq enabled-minor-languages nil)
 (setq enabled-truetype nil)
+(setq enable-mf-customization nil)

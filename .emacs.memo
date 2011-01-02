@@ -21,7 +21,7 @@
 ;; howm
 ;; download from http://howm.sourceforge.jp/
 ;; or "sudo aptitude install howm"
-
+(add-to-list 'load-path (expand-file-name "~/elisp/howm"))
 (unless (boundp 'my-howm-dir)
   (setq my-howm-dir (system-name)))
 (setq howm-menu-lang 'ja)
