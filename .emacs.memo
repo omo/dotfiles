@@ -19,6 +19,14 @@
     (switch-to-buffer welcome-page)))
 (define-key ctl-x-map "w" 'my-open-muse)
 
+(defun my-open-muse-coke()
+  (interactive)
+  (let ((welcome-page 
+	 (find-file-noselect 
+	  (expand-file-name "~/memo/note/RememberTheCoke"))))
+    (switch-to-buffer welcome-page)))
+(define-key ctl-x-map "W" 'my-open-muse-coke)
+
 ;; howm
 ;; download from http://howm.sourceforge.jp/
 ;; or "sudo aptitude install howm"
@@ -35,5 +43,16 @@
          (append '(("\\.howm$" . howm-mode)) auto-mode-alist))
 (require 'howm)
 (require 'howm-mode)
+
+;;
+;; Open the journal file
+;;
+(defun my-open-journal()
+  (interactive)
+  (let ((welcome-page 
+	 (find-file-noselect 
+	  (expand-file-name "~/memo/journal.md"))))
+    (switch-to-buffer welcome-page)))
+(define-key ctl-x-map "J" 'my-open-journal)
 
 (add-hook 'howm-mode-hook 'turn-on-auto-revert-mode)

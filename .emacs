@@ -33,6 +33,12 @@
       (append '(("\\.svg$" . xml-mode)) auto-mode-alist))
 
 ;; SKK
+;; for Carbon Emacs,
+;; export SKK_LISPDIR=/Applications/Emacs.app/Contents/Resources/site-lisp/skk \
+;;	SKK_INFODIR=/Applications/Emacs.app/Contents/Resources/info \
+;;	SKK_DATADIR=/Applications/Emacs.app/Contents/Resources/share/skk ; \
+;; make EMACS=/Applications/Emacs.app/Contents/MacOS/Emacs \
+;;      prefix=/Applications/Emacs.app/Contents/Resources install
 (require 'skk-setup)
 (defvar skk-large-jisyo "~/SKK-JISYO.L")
 
@@ -60,10 +66,10 @@
 ;; for hobby programming
 (when enabled-minor-languages
   (require 'erlang)
-  (setq auto-mode-alist
-	(append '(("\\.erl$" . erlang-mode)
-		  ("\\.hrl$" . erlang-mode)) auto-mode-alist))
-  (add-to-list 'load-path (expand-file-name "~/elisp/scala"))
+ (setq auto-mode-alist
+       (append '(("\\.erl$" . erlang-mode)
+		 ("\\.hrl$" . erlang-mode)) auto-mode-alist))
+ (add-to-list 'load-path (expand-file-name "~/elisp/scala"))
   (setq auto-mode-alist
 	(append '(("\\.as$" . java-mode)) auto-mode-alist))
   (require 'scala-mode-auto))
@@ -87,6 +93,7 @@
   (maximize-frame))
 
 ;; http://github.com/rmm5t/maxframe-el/tree/master
+;; http://github.com/rmm5t/maxframe-el/raw/master/maxframe.el
 (require 'maxframe)
 ;; emacsclient
 (server-start)
@@ -98,6 +105,13 @@
 ;; c++-mode
 (setq auto-mode-alist
       (append '(("\.h$" . c++-mode)) auto-mode-alist))
+
+;; javascript-mode
+(defun my-js-mode-hook()
+  (interactive)
+  (setq indent-tabs-mode nil))
+
+(add-hook 'js-mode-hook 'my-js-mode-hook)
 
 ;; webkit-style
 ;; http://lists.macosforge.org/pipermail/webkit-dev/2009-September/010014.html
@@ -113,10 +127,17 @@
 ;; http://google-styleguide.googlecode.com/svn/trunk/google-c-style.el
 (require 'google-c-style)
 
+(defun should-chrome-mode-p ()
+  (string-match "src/chrome" (buffer-file-name)))
+
+(defun force-google-c-mode ()
+  (interactive)
+  (google-set-c-style))
+
 ;; for chrome
 (defun chrome-c-mode-hook ()
   (interactive)
-  (if (string-match "src/chrome" (buffer-file-name))
+  (if (should-chrome-mode-p)
       (google-set-c-style)
     (webkit-c-mode-hook)))
 
@@ -148,7 +169,6 @@
 		      '(cursor-color . "black")
 		      '(font . "Monospace-8"))
 		default-frame-alist)))
-
 
 ;;(defface my-face-r-1 '((t (:background "gray15"))) nil)
 (defface my-face-b-1 '((t (:background "red"))) nil)
@@ -238,3 +258,9 @@
           (replace-string long-url short-url nil (car bounds) (cdr bounds)))))))
 
 (global-set-key (kbd "C-c S") 'my-shorten-bug-url)
+
+(require 'color-theme)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     (color-theme-arjen)))
