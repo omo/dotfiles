@@ -1,0 +1,4 @@
+
+(setq will-take-memo t)
+(setq enabled-minor-languages t)
+(setq enabled-truetype nil)
