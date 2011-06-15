@@ -4,6 +4,7 @@
 ;; download from http://mwolson.org/projects/EmacsMuse.html
 ;; or "sudo aptitude install muse-el"
 (add-to-list 'load-path (expand-file-name "~/elisp/muse"))
+(add-to-list 'load-path (expand-file-name "~/elisp/howm"))
 (setq muse-project-alist
       '(("Note" ("~/memo/note" :default "index"))))
 (setq muse-file-extension nil
@@ -18,10 +19,18 @@
     (switch-to-buffer welcome-page)))
 (define-key ctl-x-map "w" 'my-open-muse)
 
+(defun my-open-muse-coke()
+  (interactive)
+  (let ((welcome-page 
+	 (find-file-noselect 
+	  (expand-file-name "~/memo/note/RememberTheCoke"))))
+    (switch-to-buffer welcome-page)))
+(define-key ctl-x-map "W" 'my-open-muse-coke)
+
 ;; howm
 ;; download from http://howm.sourceforge.jp/
 ;; or "sudo aptitude install howm"
-
+(add-to-list 'load-path (expand-file-name "~/elisp/howm"))
 (unless (boundp 'my-howm-dir)
   (setq my-howm-dir (system-name)))
 (setq howm-menu-lang 'ja)
@@ -34,3 +43,16 @@
          (append '(("\\.howm$" . howm-mode)) auto-mode-alist))
 (require 'howm)
 (require 'howm-mode)
+
+;;
+;; Open the journal file
+;;
+(defun my-open-journal()
+  (interactive)
+  (let ((welcome-page 
+	 (find-file-noselect 
+	  (expand-file-name "~/memo/journal.md"))))
+    (switch-to-buffer welcome-page)))
+(define-key ctl-x-map "J" 'my-open-journal)
+
+(add-hook 'howm-mode-hook 'turn-on-auto-revert-mode)
