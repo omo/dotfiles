@@ -72,7 +72,6 @@
 		 ("\\.hrl$" . erlang-mode)) auto-mode-alist))
  (add-to-list 'load-path (expand-file-name "~/elisp/scala"))
   (setq auto-mode-alist
-<<<<<<< HEAD
 	(append '(("\\.erl$" . erlang-mode)
 		  ("\\.hrl$" . erlang-mode)) auto-mode-alist)))
 (defun setup-ensime ()
@@ -86,6 +85,7 @@
   ;; MINI HOWTO: 
   ;; Open .scala file. M-x ensime (once per project)
   )
+
 (when enabled-minor-languages
   (add-to-list 'load-path (expand-file-name "~/elisp/scala"))
   (require 'scala-mode-auto)
@@ -101,12 +101,7 @@
   (defun my-coffee-mode-hook()
     (interactive)
     (setq tab-width 2)
-    (setq coffee-tab-width 2))
-  (add-hook 'coffee-mode-hook 'my-coffee-mode-hook))
-=======
-	(append '(("\\.as$" . java-mode)) auto-mode-alist))
-  (require 'scala-mode-auto))
->>>>>>> origin/master
+    (setq coffee-tab-width 2)))
 
 (when enable-mf-customization
   (setq mf-off-x      1280)
@@ -142,7 +137,6 @@
 (setq auto-mode-alist
       (append '(("\.h$" . c++-mode)) auto-mode-alist))
 
-<<<<<<< HEAD
 ;; llvm/utils/emacs/emacs.el
 (c-add-style "llvm.org"
 	     '((fill-column . 80)
@@ -151,14 +145,13 @@
 	       (indent-tabs-mode . nil)))
 (defun llvm-c-mode-hook ()
   (c-set-style "llvm.org"))
-=======
+
 ;; javascript-mode
 (defun my-js-mode-hook()
   (interactive)
   (setq indent-tabs-mode nil))
 
 (add-hook 'js-mode-hook 'my-js-mode-hook)
->>>>>>> origin/master
 
 ;; webkit-style
 ;; http://lists.macosforge.org/pipermail/webkit-dev/2009-September/010014.html
@@ -170,7 +163,10 @@
   (c-set-offset 'innamespace 0) 
   (c-set-offset 'substatement-open 0))
 
-<<<<<<< HEAD
+;; google-c-style.el
+;; http://google-styleguide.googlecode.com/svn/trunk/google-c-style.el
+(require 'google-c-style)
+
 (defun my-c-mode-hook ()
   (cond 
    ((string-match "llvm" buffer-file-name)
@@ -178,29 +174,13 @@
    ((or (string-match "WebCore" buffer-file-name)
 	(string-match "JavaScriptCore" buffer-file-name)
 	(string-match "WebKit" buffer-file-name))
-    (webkit-c-mode-hook))))
+    (webkit-c-mode-hook))
+   (google-set-c-style)))
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
-=======
-;; google-c-style.el
-;; http://google-styleguide.googlecode.com/svn/trunk/google-c-style.el
-(require 'google-c-style)
-
-(defun should-chrome-mode-p ()
-  (string-match "src/chrome" (buffer-file-name)))
 
 (defun force-google-c-mode ()
   (interactive)
   (google-set-c-style))
-
-;; for chrome
-(defun chrome-c-mode-hook ()
-  (interactive)
-  (if (should-chrome-mode-p)
-      (google-set-c-style)
-    (webkit-c-mode-hook)))
-
-(add-hook 'c-mode-common-hook 'chrome-c-mode-hook)
->>>>>>> origin/master
 
 (defun webkit-change-log-mode-hook ()
   (setq tab-width 8)
@@ -250,7 +230,6 @@
 (ad-enable-advice 'font-lock-mode 'before 'my-font-lock-mode)
 (ad-activate 'font-lock-mode)
 
-<<<<<<< HEAD
 ;; http://code.google.com/p/js2-mode/
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -265,7 +244,6 @@
 (require 'color-theme)
 (color-theme-initialize)
 (color-theme-simple-1)
-=======
 
 (defun split-window-horizontally-triple ()
   (interactive)
@@ -293,7 +271,6 @@
 (global-set-key (kbd "M-n") 'next-buffer)
 (global-set-key (kbd "M-P") 'my-last-window)
 (global-set-key (kbd "M-N") 'my-next-window)
->>>>>>> origin/master
 
 ;;
 ;; gdb
@@ -306,13 +283,7 @@
 
 (defun sbt()
   (interactive)
-<<<<<<< HEAD
   (compile "SBT_OPTS=-Dsbt.log.noformat=true sbt test"))
-=======
-  (recompile)
-  (set-window-buffer (selected-window) "*compilation*")
-  (end-of-buffer))
-(global-set-key "\C-xr" 'my-recompile)
 
 ;; modified http://www.emacswiki.org/emacs/TinyUrl
 (require 'thingatpt)
@@ -343,4 +314,4 @@
   '(progn
      (color-theme-initialize)
      (color-theme-arjen)))
->>>>>>> origin/master
+
