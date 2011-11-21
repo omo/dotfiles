@@ -1,4 +1,4 @@
-
+;; 
 ;; load local configurations
 (load (expand-file-name "~/work/dotfiles/.emacs.prologue"))
 ;;
@@ -6,7 +6,9 @@
 ;;
 (set-language-environment "Japanese")
 (set-default-coding-systems 'utf-8)
-(tool-bar-mode nil)
+(if (and (bound-and-true-p tool-bar-mode)
+	 (fboundp 'tool-bar-mode))
+    (tool-bar-mode nil))
 (menu-bar-mode nil)
 (setq visible-bell t)
 
@@ -33,15 +35,31 @@
 (setq auto-mode-alist
       (append '(("\\.svg$" . xml-mode)) auto-mode-alist))
 
+;;
+;; el-get https://github.com/dimitri/el-get
+;;
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil t)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (end-of-buffer)
+    (eval-print-last-sexp)))
+
+;; TODO: Write recipe for erlang
+(setq my-packages
+      (append
+       '(scala-mode js2-mode ruby-mode ;ensime 
+		    apel coffee-mode google-c-style psvn color-theme 
+		    color-moccur moccur-edit maxframe muse howm)
+       (mapcar 'el-get-source-name el-get-sources)))
+
+(el-get 'sync my-packages)
+;(el-get 'sync)
+
+
 ;; SKK
-;; for Carbon Emacs,
-;; export SKK_LISPDIR=/Applications/Emacs.app/Contents/Resources/site-lisp/skk \
-;;	SKK_INFODIR=/Applications/Emacs.app/Contents/Resources/info \
-;;	SKK_DATADIR=/Applications/Emacs.app/Contents/Resources/share/skk ; \
-;; make EMACS=/Applications/Emacs.app/Contents/MacOS/Emacs \
-;;      prefix=/Applications/Emacs.app/Contents/Resources install
-(require 'skk-setup)
-(defvar skk-large-jisyo "~/SKK-JISYO.L")
+; (defvar skk-large-jisyo "~/SKK-JISYO.L")
 
 ;; Moccur
 ;; http://www.bookshelf.jp/elc/moccur-edit.el
@@ -64,44 +82,37 @@
 (setq auto-mode-alist
       (append '(("\\.rb$" . ruby-mode)) auto-mode-alist))
 
-;; for hobby programming
-(when enabled-minor-languages
-  (require 'erlang)
- (setq auto-mode-alist
-       (append '(("\\.erl$" . erlang-mode)
-		 ("\\.hrl$" . erlang-mode)) auto-mode-alist))
- (add-to-list 'load-path (expand-file-name "~/elisp/scala"))
-  (setq auto-mode-alist
-	(append '(("\\.erl$" . erlang-mode)
-		  ("\\.hrl$" . erlang-mode)) auto-mode-alist)))
-(defun setup-ensime ()
-  ;; Load the ensime lisp code...
-  (add-to-list 'load-path "~/local/ensime/elisp/")
-  (require 'ensime)
-  ;; This step causes the ensime-mode to be started whenever
-  ;; scala-mode is started for a buffer. You may have to customize this step
-  ;; if you're not using the standard scala mode.
-  (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
-  ;; MINI HOWTO: 
-  ;; Open .scala file. M-x ensime (once per project)
-  )
+;;
+;; For hobby programming
+;;
 
-(when enabled-minor-languages
-  (add-to-list 'load-path (expand-file-name "~/elisp/scala"))
-  (require 'scala-mode-auto)
-  (defun my-scala-mode-hook()
-    (interactive)
-    (setq indent-tabs-mode nil))
-  (add-hook 'scala-mode-hook 'my-scala-mode-hook)
-  (setup-ensime)
-)
+;; Erlang - At Nov. 2011, there is no el-get recipe for this.
+(if (require 'erlang nil t)
+    (setq auto-mode-alist
+	  (append '(("\\.erl$" . erlang-mode)
+		    ("\\.hrl$" . erlang-mode)) auto-mode-alist)))
 
-(when enabled-minor-languages
-  (require 'coffee-mode)
-  (defun my-coffee-mode-hook()
-    (interactive)
-    (setq tab-width 2)
-    (setq coffee-tab-width 2)))
+;; Scala
+(require 'scala-mode-auto)
+(defun my-scala-mode-hook()
+  (interactive)
+  (setq indent-tabs-mode nil))
+(add-hook 'scala-mode-hook 'my-scala-mode-hook)
+
+(if (require 'ensine nil t)
+    (progn
+      (setup-ensime)
+      (add-hook 'scaxla-mode-hook 'ensime-scala-mode-hook)))
+
+(defun sbt()
+  (interactive)
+  (compile "SBT_OPTS=-Dsbt.log.noformat=true sbt test"))
+
+(require 'coffee-mode)
+(defun my-coffee-mode-hook()
+  (interactive)
+  (setq tab-width 2)
+  (setq coffee-tab-width 2))
 
 (when enable-mf-customization
   (setq mf-off-x      1280)
@@ -126,12 +137,15 @@
 ;; http://github.com/rmm5t/maxframe-el/tree/master
 ;; http://github.com/rmm5t/maxframe-el/raw/master/maxframe.el
 (require 'maxframe)
+
 ;; emacsclient
-(server-start)
+(if (bound-and-true-p enable-server)
+    (server-start))
 
 ;; python-mode
 (setq auto-mode-alist
-      (append '(("SConstruct" . python-mode)) auto-mode-alist))
+      (append '(("SConstruct" . python-mode)
+		("wscript" . python-mode)) auto-mode-alist))
 
 ;; c++-mode
 (setq auto-mode-alist
@@ -144,6 +158,7 @@
 	       (c-basic-offset . 2)
 	       (indent-tabs-mode . nil)))
 (defun llvm-c-mode-hook ()
+  (interactive)
   (c-set-style "llvm.org"))
 
 ;; javascript-mode
@@ -163,10 +178,6 @@
   (c-set-offset 'innamespace 0) 
   (c-set-offset 'substatement-open 0))
 
-;; google-c-style.el
-;; http://google-styleguide.googlecode.com/svn/trunk/google-c-style.el
-(require 'google-c-style)
-
 (defun my-c-mode-hook ()
   (cond 
    ((string-match "llvm" buffer-file-name)
@@ -176,6 +187,9 @@
 	(string-match "WebKit" buffer-file-name))
     (webkit-c-mode-hook))
    (google-set-c-style)))
+;; Remove hooks which is registered by el-get.
+(remove-hook 'c-mode-common-hook 'google-set-c-style)
+(remove-hook 'c-mode-common-hook 'google-make-newline-indent)
 (add-hook 'c-mode-common-hook 'my-c-mode-hook)
 
 (defun force-google-c-mode ()
@@ -222,7 +236,7 @@
   (font-lock-add-keywords
    major-mode
    '(("\t" 0 my-face-b-2 append)
-     ("¡¡" 0 my-face-b-1 append)
+     ("ï½¡ï½¡" 0 my-face-b-1 append)
      ;;("[ \t]+$" 0 my-face-u-1 append)
      ;;("[\r]*\n" 0 my-face-r-1 append)
      )))
@@ -230,6 +244,7 @@
 (ad-enable-advice 'font-lock-mode 'before 'my-font-lock-mode)
 (ad-activate 'font-lock-mode)
 
+;; JS2 mode
 ;; http://code.google.com/p/js2-mode/
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -251,7 +266,9 @@
     (split-window-horizontally size)
     (split-window-horizontally)))
 
+;;
 ;; from http://d.hatena.ne.jp/rubikitch/20100210/emacs
+;;
 (defun other-window-or-split ()
   (interactive)
   (when (one-window-p)
@@ -281,11 +298,9 @@
 ;(setq gdb-use-separate-io-buffer t)
 (setq gud-tooltip-echo-area nil)
 
-(defun sbt()
-  (interactive)
-  (compile "SBT_OPTS=-Dsbt.log.noformat=true sbt test"))
-
+;;
 ;; modified http://www.emacswiki.org/emacs/TinyUrl
+;;
 (require 'thingatpt)
 (defun my-get-shorter-bug-url(longer-uri)
   (cond ((string-match "bugs.webkit.org" longer-uri)

@@ -45,14 +45,27 @@
 (require 'howm-mode)
 
 ;;
-;; Open the journal file
+;; Create and open the journal file
 ;;
-(defun my-open-journal()
-  (interactive)
-  (let ((welcome-page 
-	 (find-file-noselect 
-	  (expand-file-name "~/memo/journal.md"))))
-    (switch-to-buffer welcome-page)))
-(define-key ctl-x-map "J" 'my-open-journal)
+;; https://gist.github.com/1363059
+(when (bound-and-true-p tj-name)
+  (defun my-open-tj (given-title)
+    (interactive "MTitle: ")
+    (let ((welcome-page 
+	   (find-file-noselect 
+	    (shell-command-to-string 
+	     (concat tj-name 
+		     " " 
+		     (if (string= given-title "")
+			 "Today" 
+		       given-title))))))
+      (switch-to-buffer welcome-page)))
+  (define-key ctl-x-map "J" 'my-open-tj))
 
 (add-hook 'howm-mode-hook 'turn-on-auto-revert-mode)
+
+;; For mac. This should be here instead of .emacs
+;; to void an ecoding trouble.
+(when (eq window-system 'ns)
+  (define-key global-map [?¥] "\\")
+  (setq ns-command-modifier 'super))

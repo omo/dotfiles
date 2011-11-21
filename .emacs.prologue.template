@@ -4,4 +4,5 @@
 (setq enabled-truetype nil)
 (setq enable-mf-customization nil)
 (setq my-howm-dir "omo")
-
+(setq enable-server nil)
+;(setq tj-name "/Users/morrita/work/trivials/tj.rb")
