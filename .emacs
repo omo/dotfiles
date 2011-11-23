@@ -330,3 +330,12 @@
      (color-theme-initialize)
      (color-theme-arjen)))
 
+;; ibus-el http://www11.atwiki.jp/s-irie/pages/21.html
+;; aptitude install ibus-el
+(if (require 'ibus nil t)
+    (progn
+      ;; For mac keybaord.
+      (global-set-key (kbd "<Hangul_Hanja>") 'ibus-mode-off)
+      (global-set-key (kbd "<Hangul>") 'ibus-mode-on)
+      (ibus-define-common-key ?\C-\s nil)
+      (setq ibus-cursor-color '("red" "blue" "limegreen"))))
