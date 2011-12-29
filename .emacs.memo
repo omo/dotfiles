@@ -1,10 +1,7 @@
 ;; -*- Mode: Emacs-Lisp -*-
 ;;
 ;; Muse
-;; download from http://mwolson.org/projects/EmacsMuse.html
-;; or "sudo aptitude install muse-el"
-(add-to-list 'load-path (expand-file-name "~/elisp/muse"))
-(add-to-list 'load-path (expand-file-name "~/elisp/howm"))
+;;
 (setq muse-project-alist
       '(("Note" ("~/memo/note" :default "index"))))
 (setq muse-file-extension nil
@@ -30,7 +27,6 @@
 ;; howm
 ;; download from http://howm.sourceforge.jp/
 ;; or "sudo aptitude install howm"
-(add-to-list 'load-path (expand-file-name "~/elisp/howm"))
 (unless (boundp 'my-howm-dir)
   (setq my-howm-dir (system-name)))
 (setq howm-menu-lang 'ja)
@@ -44,28 +40,14 @@
 (require 'howm)
 (require 'howm-mode)
 
-;;
-;; Create and open the journal file
-;;
-;; https://gist.github.com/1363059
-(when (bound-and-true-p tj-name)
-  (defun my-open-tj (given-title)
-    (interactive "MTitle: ")
-    (let ((welcome-page 
-	   (find-file-noselect 
-	    (shell-command-to-string 
-	     (concat tj-name 
-		     " " 
-		     (if (string= given-title "")
-			 "Today" 
-		       given-title))))))
-      (switch-to-buffer welcome-page)))
-  (define-key ctl-x-map "J" 'my-open-tj))
-
 (add-hook 'howm-mode-hook 'turn-on-auto-revert-mode)
+
+;; For my trivials.el
+(define-key ctl-x-map "J" 'triv-octopress-new-post)
 
 ;; For mac. This should be here instead of .emacs
 ;; to void an ecoding trouble.
 (when (eq window-system 'ns)
   (define-key global-map [?¥] "\\")
   (setq ns-command-modifier 'super))
+

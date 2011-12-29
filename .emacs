@@ -17,6 +17,8 @@
 (setq default-buffer-file-coding-system 'utf-8-unix)
 ;; MS Windows clipboard is UTF-16LE 
 ;(set-clipboard-coding-system 'utf-16le-dos)
+;; For linux
+(setq x-select-enable-clipboard t)
 
 ;;
 ;; customize built-ins
@@ -26,8 +28,9 @@
 (setq inhibit-startup-screen t)
 (iswitchb-mode t)
 (global-set-key "\M-g" `goto-line)
+
 (global-set-key "\M-i" `indent-region)
-(add-to-list 'load-path (expand-file-name "~/elisp/"))
+(add-to-list 'load-path (expand-file-name "~/work/trivials/elisp/"))
 
 ;; mode association
 (setq auto-mode-alist
@@ -113,6 +116,7 @@
   (interactive)
   (setq tab-width 2)
   (setq coffee-tab-width 2))
+(add-hook 'coffee-mode-hook 'my-coffee-mode-hook)
 
 (when enable-mf-customization
   (setq mf-off-x      1280)
@@ -167,6 +171,8 @@
   (setq indent-tabs-mode nil))
 
 (add-hook 'js-mode-hook 'my-js-mode-hook)
+(setq auto-mode-alist
+      (append '(("\.js$" . js2-mode)) auto-mode-alist))
 
 ;; webkit-style
 ;; http://lists.macosforge.org/pipermail/webkit-dev/2009-September/010014.html
@@ -246,7 +252,7 @@
 
 ;; JS2 mode
 ;; http://code.google.com/p/js2-mode/
-(autoload 'js2-mode "js2" nil t)
+;(autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (defun my-js2-mode-hook()
   (interactive)
@@ -276,18 +282,10 @@
   (other-window 1))
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
-(defun my-last-window ()
-  (interactive)
-  (other-window -1))
-
-(defun my-next-window ()
-  (interactive)
-  (other-window  1))
-
 (global-set-key (kbd "M-p") 'previous-buffer)
 (global-set-key (kbd "M-n") 'next-buffer)
-(global-set-key (kbd "M-P") 'my-last-window)
-(global-set-key (kbd "M-N") 'my-next-window)
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
 
 ;;
 ;; gdb
@@ -330,12 +328,23 @@
      (color-theme-initialize)
      (color-theme-arjen)))
 
+(defun ibus-mode-on-and-enable()
+  (interactive)
+  (progn
+    (ibus-mode-on)
+    (ibus-enable)))
+
+;; https://github.com/omo/trivials
+(require 'trivials)
+
 ;; ibus-el http://www11.atwiki.jp/s-irie/pages/21.html
 ;; aptitude install ibus-el
 (if (require 'ibus nil t)
     (progn
       ;; For mac keybaord.
-      (global-set-key (kbd "<Hangul_Hanja>") 'ibus-mode-off)
-      (global-set-key (kbd "<Hangul>") 'ibus-mode-on)
+      (global-set-key (kbd "<Hangul_Hanja>") 'ibus-disable)
+      (global-set-key (kbd "<Hangul>") 'ibus-enable)
+      (global-set-key (kbd "C-j") 'ibus-mode-on)
       (ibus-define-common-key ?\C-\s nil)
       (setq ibus-cursor-color '("red" "blue" "limegreen"))))
+
