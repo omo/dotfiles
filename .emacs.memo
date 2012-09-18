@@ -43,11 +43,19 @@
 (add-hook 'howm-mode-hook 'turn-on-auto-revert-mode)
 
 ;; For my trivials.el
-(define-key ctl-x-map "J" 'triv-octopress-new-post)
+(define-prefix-command 'ctl-x-j-map)
+(define-key ctl-x-map "o" 'ctl-x-j-map)
+(define-key ctl-x-j-map "n" 'triv-octopress-new-post)
+(define-key ctl-x-j-map "l" 'triv-octopress-show-dir)
+
+;; For Ankit.
+(add-to-list 'load-path (expand-file-name "~/work/ankit/elisp/"))
+(if (require 'ankit nil t)
+    (progn
+      (ankit-define-key-default)))
 
 ;; For mac. This should be here instead of .emacs
 ;; to void an ecoding trouble.
 (when (eq window-system 'ns)
   (define-key global-map [?¥] "\\")
   (setq ns-command-modifier 'super))
-
