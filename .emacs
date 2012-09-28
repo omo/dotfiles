@@ -8,7 +8,7 @@
 (set-default-coding-systems 'utf-8)
 (if (and (bound-and-true-p tool-bar-mode)
 	 (fboundp 'tool-bar-mode))
-    (tool-bar-mode nil))
+    (tool-bar-mode -1))
 (menu-bar-mode nil)
 (setq visible-bell t)
 
