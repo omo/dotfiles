@@ -8,7 +8,7 @@
 (set-default-coding-systems 'utf-8)
 (if (and (bound-and-true-p tool-bar-mode)
 	 (fboundp 'tool-bar-mode))
-    (tool-bar-mode nil))
+    (tool-bar-mode -1))
 (menu-bar-mode nil)
 (setq visible-bell t)
 
@@ -229,6 +229,12 @@
 		      '(font . "Monospace-8"))
 		default-frame-alist)))
 
+;; FIXME: should be limited to mac
+(if (display-graphic-p)
+    (progn
+      (set-fontset-font (frame-parameter nil 'font) 'japanese-jisx0208 (font-spec :family "ヒラギノ角ゴ ProN") nil 'append)
+      (set-fontset-font (frame-parameter nil 'font) 'chinese-gb2312 (font-spec :family "STSong") nil 'append)))
+
 ;;(defface my-face-r-1 '((t (:background "gray15"))) nil)
 (defface my-face-b-1 '((t (:background "red"))) nil)
 (defface my-face-b-2 '((t (:background "honeydew1"))) nil)
@@ -258,13 +264,6 @@
   (interactive)
   (setq js2-basic-offset 2))
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
-
-;; color-theme
-;; http://www.nongnu.org/color-theme/
-(add-to-list 'load-path (expand-file-name "~/elisp/color-theme"))
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-simple-1)
 
 (defun split-window-horizontally-triple ()
   (interactive)
@@ -326,7 +325,8 @@
 (eval-after-load "color-theme"
   '(progn
      (color-theme-initialize)
-     (color-theme-arjen)))
+     ;(color-theme-arjen)
+     (color-theme-montz)))
 
 (defun ibus-mode-on-and-enable()
   (interactive)
@@ -348,3 +348,5 @@
       (ibus-define-common-key ?\C-\s nil)
       (setq ibus-cursor-color '("red" "blue" "limegreen"))))
 
+;; Copied from window.el: The original setting doesn't work on Cocoa Emacs on ML.
+(define-key ctl-x-map "o" 'other-window)
