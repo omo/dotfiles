@@ -264,7 +264,7 @@
 (add-to-list 'load-path (expand-file-name "~/elisp/color-theme"))
 (require 'color-theme)
 (color-theme-initialize)
-(color-theme-simple-1)
+(color-theme-deep-blue)
 
 (defun split-window-horizontally-triple ()
   (interactive)
