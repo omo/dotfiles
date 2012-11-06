@@ -53,7 +53,7 @@
 (setq my-packages
       (append
        '(scala-mode js2-mode ruby-mode ;ensime 
-		    apel coffee-mode google-c-style psvn color-theme 
+		    apel coffee-mode google-c-style psvn color-theme go-mode
 		    color-moccur moccur-edit maxframe muse howm)
        (mapcar 'el-get-source-name el-get-sources)))
 
