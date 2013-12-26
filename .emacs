@@ -10,7 +10,7 @@
 	 (fboundp 'tool-bar-mode))
     (tool-bar-mode -1))
 (menu-bar-mode nil)
-(setq visible-bell t)
+(setq visible-bell nil)
 
 (prefer-coding-system       'utf-8-unix)
 (set-default-coding-systems 'utf-8-unix)
@@ -54,7 +54,8 @@
       (append
        '(scala-mode js2-mode ruby-mode ;ensime 
 		    apel coffee-mode google-c-style psvn color-theme go-mode
-		    color-moccur moccur-edit maxframe muse howm)
+		    ;color-moccur moccur-edit maxframe muse howm)
+		    color-moccur moccur-edit maxframe howm)
        (mapcar 'el-get-source-name el-get-sources)))
 
 (el-get 'sync my-packages)
@@ -188,11 +189,9 @@
   (cond 
    ((string-match "llvm" buffer-file-name)
     (llvm-c-mode-hook))
-   ((or (string-match "WebCore" buffer-file-name)
-	(string-match "JavaScriptCore" buffer-file-name)
-	(string-match "WebKit" buffer-file-name))
+   ((string-match "WebKit" buffer-file-name)
     (webkit-c-mode-hook))
-   (google-set-c-style)))
+   (t (google-set-c-style))))
 ;; Remove hooks which is registered by el-get.
 (remove-hook 'c-mode-common-hook 'google-set-c-style)
 (remove-hook 'c-mode-common-hook 'google-make-newline-indent)
@@ -284,6 +283,7 @@
 (global-set-key (kbd "M-p") 'previous-buffer)
 (global-set-key (kbd "M-n") 'next-buffer)
 (when (fboundp 'windmove-default-keybindings)
+  (setq windmove-wrap-around t)
   (windmove-default-keybindings))
 
 ;;
@@ -328,8 +328,8 @@
 (eval-after-load "color-theme"
   '(progn
      (color-theme-initialize)
-     ;(color-theme-arjen)
-     (color-theme-montz)))
+     (color-theme-arjen)))
+     ;(color-theme-montz)))
 
 (defun ibus-mode-on-and-enable()
   (interactive)
@@ -353,3 +353,13 @@
 
 ;; Copied from window.el: The original setting doesn't work on Cocoa Emacs on ML.
 (define-key ctl-x-map "o" 'other-window)
+
+;; go-mode
+(defun my-go-mode-hook () 
+  (add-hook 'before-save-hook 'gofmt-before-save) 
+  (setq tab-width 2))
+(add-hook 'go-mode-hook 'my-go-mode-hook)
+
+;;
+(add-to-list 'load-path "~/work/wit/elisp")
+(require 'wit-mode)
