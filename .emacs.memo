@@ -6,8 +6,8 @@
       '(("Note" ("~/memo/note" :default "index"))))
 (setq muse-file-extension nil
       muse-mode-auto-p t)
-(require 'muse-mode)
-(require 'muse-wiki)
+(require 'muse-mode nil t)
+(require 'muse-wiki nil t)
 (defun my-open-muse()
   (interactive)
   (let ((welcome-page 
