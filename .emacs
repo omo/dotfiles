@@ -53,7 +53,7 @@
 (setq my-packages
       (append
        '(scala-mode js2-mode ruby-mode ;ensime 
-		    apel coffee-mode google-c-style psvn color-theme go-mode
+		    apel coffee-mode google-c-style psvn color-theme go-mode rust-mode
 		    color-moccur moccur-edit maxframe muse howm)
        (mapcar 'el-get-source-name el-get-sources)))
 
@@ -328,8 +328,9 @@
 (eval-after-load "color-theme"
   '(progn
      (color-theme-initialize)
-     ;(color-theme-arjen)
-     (color-theme-montz)))
+     (color-theme-arjen)
+     ;(color-theme-montz)
+     ))
 
 (defun ibus-mode-on-and-enable()
   (interactive)
@@ -353,3 +354,7 @@
 
 ;; Copied from window.el: The original setting doesn't work on Cocoa Emacs on ML.
 (define-key ctl-x-map "o" 'other-window)
+
+;; WIT
+(add-to-list 'load-path (expand-file-name "~/work/wit/elisp"))
+(require 'wit-mode)
