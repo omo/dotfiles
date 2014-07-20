@@ -10,6 +10,7 @@
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
+(package-refresh-contents)
 (my-install-if-needed 'auto-complete)
 (my-install-if-needed 'color-theme)
 (my-install-if-needed 'wgrep)
