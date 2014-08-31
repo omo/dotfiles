@@ -39,7 +39,8 @@
 (eval-after-load "color-theme"
   '(progn
      (color-theme-initialize)
-     (color-theme-arjen)
+;; This doesn't work well in my Ubuntu VM for some reson :-/
+;;     (color-theme-arjen)
      ))
 
 ;; MS Windows clipboard is UTF-16LE
@@ -86,7 +87,10 @@
 
 (require 'helm-config)
 (global-set-key (kbd "C-c h") 'helm-mini)
-(helm-mode t)
+;; Doesn't work :-(
+;; (setq helm-exit-idle-delay 0)
+;; (helm-mode t)
+
 
 ;;
 ;; Programming modes
