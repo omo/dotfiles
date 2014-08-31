@@ -10,7 +10,11 @@
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
-(package-refresh-contents)
+(if (and
+     (not (getenv "PROVISION_MAY_SKIP_ELPA_REFRESH")) ;; This is for Vagrant provisioning
+     (require 'google-c-style nil t)) ;; This checks if this is the initial run.
+    (package-refresh-contents))
+
 (my-install-if-needed 'auto-complete)
 (my-install-if-needed 'color-theme)
 (my-install-if-needed 'wgrep)
