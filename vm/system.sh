@@ -6,3 +6,6 @@ if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
   echo "deb https://get.docker.io/ubuntu docker main" > /etc/apt/sources.list.d/docker.list
   aptitude update
 fi
+
+# http://stackoverflow.com/questions/23169385/installing-docker-io-on-ubuntu-14-04lts
+usermod -a -G docker vagrant
