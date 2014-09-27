@@ -30,6 +30,7 @@
 (my-install-if-needed 'ruby-mode)
 (my-install-if-needed 'rust-mode)
 (my-install-if-needed 'go-mode)
+(my-install-if-needed 'groovy-mode)
 (my-install-if-needed 'go-autocomplete)
 (my-install-if-needed 'scala-mode)
 (my-install-if-needed 'python-mode)
