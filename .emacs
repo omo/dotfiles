@@ -12,7 +12,8 @@
 (setq make-backup-files nil)
 (setq truncate-partial-width-window nil)
 (setq inhibit-startup-screen t)
-(iswitchb-mode t)
+(require 'ido)
+(ido-mode)
 (global-set-key "\M-g" `goto-line)
 
 (global-set-key "\M-i" `indent-region)

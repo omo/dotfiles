@@ -17,10 +17,11 @@ ln -f -s $HOME/work/dotfiles/.emacs.prologue.template $HOME/work/dotfiles/.emacs
 if [ ! -d $HOME/.nvm ]; then
   # See https://github.com/creationix/nvm
   curl https://raw.githubusercontent.com/creationix/nvm/v0.14.0/install.sh | bash
-  source $HOME/.nvm/nvm.sh
-  nvm install 0.10
+  . $HOME/.nvm/nvm.sh
+  nvm install 0.12
 fi
 
+nvm use 0.12
 if [ -z `which grunt` ]; then npm install -g grunt-cli; fi
 if [ -z `which gulp` ]; then npm install -g gulp; fi
 if [ -z `which bower` ]; then npm install -g bower; fi
