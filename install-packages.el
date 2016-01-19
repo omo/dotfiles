@@ -8,11 +8,12 @@
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 (if (and
      (not (getenv "PROVISION_MAY_SKIP_ELPA_REFRESH")) ;; This is for Vagrant provisioning
-     (require 'auto-complete nil t)) ;; This checks if this is the initial run.
+     (require 'scala-mode nil t)) ;; This checks if this is the initial run.
     (package-refresh-contents))
 
 (my-install-if-needed 'auto-complete)
@@ -34,3 +35,5 @@
 (my-install-if-needed 'go-autocomplete)
 (my-install-if-needed 'scala-mode)
 (my-install-if-needed 'python-mode)
+(my-install-if-needed 'org)
+(my-install-if-needed 'org-journal)

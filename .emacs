@@ -199,6 +199,8 @@
 
 ;; mode association
 (setq auto-mode-alist
+      (append '(("\\.m$" . octave-mode)) auto-mode-alist))
+(setq auto-mode-alist
       (append '(("\\.mm$" . objc-mode)) auto-mode-alist))
 (setq auto-mode-alist
       (append '(("\\.svg$" . xml-mode)) auto-mode-alist))
@@ -248,9 +250,36 @@
 
 (global-set-key (kbd "M-p") 'previous-buffer)
 (global-set-key (kbd "M-n") 'next-buffer)
+(global-set-key (kbd "M-[") 'previous-buffer)
+(global-set-key (kbd "M-]") 'next-buffer)
+
 (when (fboundp 'windmove-default-keybindings)
   (setq windmove-wrap-around t)
   (windmove-default-keybindings))
+
+;;
+;; Org related settings
+;;
+(require 'org)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+(setq org-todo-keywords
+      '((sequence "TODO" "ACTIVE" "BLOCKED" "|" "DONE" "GONE" "ICED")))
+(setq org-return-follows-link t)
+(setq org-startup-folded nil)
+(setq org-agenda-files '("~/w/memo/o" "~/w/memo/o/j"))
+
+
+(global-set-key (kbd "C-c o")
+		(lambda () (interactive) (find-file "~/w/memo/o/index.org")))
+
+(require 'org-journal)
+(custom-set-variables
+ '(org-journal-dir "~/w/memo/o/j/")
+ '(org-journal-hide-entries-p nil)
+ '(org-journal-file-format "%Y%m%d.org"))
 
 ;;
 ;; modified http://www.emacswiki.org/emacs/TinyUrl
